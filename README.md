@@ -30,6 +30,21 @@ Open the local URL printed by Vite.
 npm run build
 ```
 
+## Project Execution Steps
+
+The full execution checklist is maintained in [PROJECT_STEPS.md](./PROJECT_STEPS.md).
+
+## Public Demo Deployment
+
+This repository includes a GitHub Pages workflow at `.github/workflows/deploy-pages.yml`.
+
+If GitHub Pages is not already active:
+
+1. Open the GitHub repository.
+2. Go to `Settings` -> `Pages`.
+3. Set the source to `GitHub Actions`.
+4. Run the `Deploy BugPilot AI to GitHub Pages` workflow or push to `main`.
+
 ## Product Positioning
 
 BugPilot AI is not a generic chatbot. The wedge is support-to-engineering handoff quality.
