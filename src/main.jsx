@@ -278,7 +278,7 @@ function Hero() {
         <div className="metrics">
           <div><strong>5 min</strong><span>demo-ready workflow</span></div>
           <div><strong>\$5/user</strong><span>starting beta price</span></div>
-          <div><strong>₹40k/mo</strong><span>first Low beta price</span></div>
+          <div><strong>Rs 40k/mo</strong><span>first revenue target</span></div>
         </div>
       </div>
       <div className="hero-panel" aria-label="BugPilot sample output">
@@ -318,7 +318,7 @@ function DemoWorkspace() {
   }, [input, template, severity]);
 
   async function generateWithBackend() {
-    setApiStatus('Calling backend API...');
+    setApiStatus('Generating with backend...');
     try {
       const response = await fetch(`${apiBaseUrl}/api/reports/generate`, {
         method: 'POST',
@@ -337,7 +337,7 @@ function DemoWorkspace() {
       }
 
       setApiReport(await response.json());
-      setApiStatus('Backend API response loaded');
+      setApiStatus('Backend response loaded');
     } catch (error) {
       setApiReport(null);
       setApiStatus(`Backend unavailable: ${error.message}. Showing local generator output.`);
@@ -422,7 +422,7 @@ function DemoWorkspace() {
           <div className="pane-header">
             <h3>Ready-to-review ticket</h3>
             <div className="actions">
-              <button type="button" onClick={generateWithBackend}><Rocket size={16} /> API</button>
+              <button type="button" onClick={generateWithBackend}><Rocket size={16} /> Generate</button>
               <button type="button" onClick={copyExport}><Copy size={16} /> Copy</button>
               <button type="button" onClick={downloadMarkdown}><FileText size={16} /> Export</button>
             </div>
@@ -588,7 +588,7 @@ function ValidationSection({ leads, addLead }) {
             leads.map((lead) => (
               <div className="lead-item" key={lead.id}>
                 <strong>{lead.name}</strong>
-                <span>{lead.role} · {lead.company || 'No company'}</span>
+                <span>{lead.role} - {lead.company || 'No company'}</span>
                 <p>{lead.pain || 'Pain not captured yet.'}</p>
               </div>
             ))

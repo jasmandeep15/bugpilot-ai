@@ -24,9 +24,9 @@ Avoid enterprise buyers at this stage. They require security reviews, procuremen
 ## Outreach Message
 
 ```text
-Hi [Name], I’m building BugPilot AI for small software teams.
+Hi [Name], I am building BugPilot AI for small software teams.
 
-It turns messy support tickets, logs, and Slack/Jira notes into clean engineer-ready bug reports, reproduction steps, RCA drafts, and customer replies.
+It turns rough customer issues, logs, screenshots, and chat notes into clear developer tickets and customer-safe replies.
 
 Curious: does your team lose time converting customer issues into actionable dev tickets?
 ```
@@ -34,7 +34,7 @@ Curious: does your team lose time converting customer issues into actionable dev
 ## Demo Follow-Up
 
 ```text
-I can send a 2-minute demo using a fake SaaS bug. If it looks useful, I’d love your feedback.
+I can send a 2-minute demo using a fake SaaS bug. If it looks useful, I would love your feedback.
 ```
 
 ## Discovery Questions
@@ -62,20 +62,20 @@ I can send a 2-minute demo using a fake SaaS bug. If it looks useful, I’d love
    - Developer handoff
    - Customer reply
 5. Export to GitHub/Jira/Linear format.
-6. Ask: “Would this save time in your current workflow?”
+6. Ask: "Would this save time in your current workflow?"
 
 ## Pricing Test
 
 Start with:
 
-- $19/month for solo founder
-- $49/month for small team
-- $99/month for team with custom templates
+- $5/user/month for early beta teams
+- $39/month for up to 10 teammates
+- $99/month founder deal for unlimited teammates during beta
 
 Ask:
 
 ```text
-If this connected to your current issue tracker and saved your team 2-3 hours per week, would $49/month be reasonable?
+If this saved your team 2-3 hours per week on customer issue handoff, would $39/month feel easy to approve?
 ```
 
 ## Pivot Rules
