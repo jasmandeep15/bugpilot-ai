@@ -72,7 +72,7 @@ The full execution checklist is maintained in [PROJECT_STEPS.md](./PROJECT_STEPS
 
 ## Public Demo Deployment
 
-This repository includes a GitHub Pages workflow at `.github/workflows/deploy-pages.yml`.
+This repository includes a GitHub Pages workflow at `.github/workflows/deploy-pages.yml`. The workflow configures Pages, builds the Vite app, uploads `dist`, and deploys through the official GitHub Pages action.
 
 Current public frontend:
 

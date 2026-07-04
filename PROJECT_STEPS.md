@@ -19,7 +19,7 @@ Goal: make the product easy to demo and validate with buyers.
 - [x] Add sample incidents and structured report generation.
 - [x] Add pricing hypothesis and validation cockpit.
 - [x] Push code to GitHub.
-- [x] Add GitHub Pages deployment workflow.
+- [x] Add GitHub Pages deployment workflow with official configure/upload/deploy actions.
 - [x] Enable GitHub Pages in repository settings if required.
 - [x] Deploy public frontend through GitHub Pages.
 - [x] Add Render deployment blueprint for frontend/backend hosting.
