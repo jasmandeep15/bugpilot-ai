@@ -13,7 +13,7 @@ It turns messy support tickets, incident notes, logs, and Slack/Jira fragments i
 - Incident summaries
 - Markdown, GitHub, Jira, and Linear-style exports
 
-The current version includes a React frontend and a Spring Boot backend. The backend uses deterministic report generation today so the product can be demoed without paid AI keys. The next step is adding an LLM provider behind the backend service.
+The current version includes a React frontend and a Spring Boot backend. The backend runs in deterministic mode by default so the product can be demoed without paid AI keys. It also includes an optional OpenAI provider that runs only on the server when configured.
 
 ## Run Locally
 
@@ -44,6 +44,30 @@ The backend exposes:
 
 - `POST http://127.0.0.1:8080/api/reports/generate`
 - `GET http://127.0.0.1:8080/actuator/health`
+
+Backend AI mode:
+
+```properties
+bugpilot.ai.provider=deterministic
+```
+
+To use the OpenAI provider locally, set these backend environment variables before starting Spring Boot:
+
+```bash
+BUGPILOT_AI_PROVIDER=openai
+OPENAI_MODEL=gpt-5.4-mini
+OPENAI_API_KEY=sk-...
+```
+
+On Windows PowerShell:
+
+```powershell
+$env:BUGPILOT_AI_PROVIDER="openai"
+$env:OPENAI_MODEL="gpt-5.4-mini"
+$env:OPENAI_API_KEY="sk-..."
+```
+
+Never put `OPENAI_API_KEY` in frontend `.env.local` or static hosting settings.
 
 Frontend environment:
 
@@ -97,6 +121,12 @@ Recommended free deployment path:
 4. Confirm backend health at `/actuator/health`.
 5. Set the frontend `VITE_API_BASE_URL` to the deployed backend URL.
 
+For real AI generation on Render, set these backend service environment variables:
+
+- `BUGPILOT_AI_PROVIDER=openai`
+- `OPENAI_MODEL=gpt-5.4-mini`
+- `OPENAI_API_KEY=<server-side secret>`
+
 ## Product Positioning
 
 BugPilot AI is not a generic chatbot. The wedge is simple: fewer back-and-forth questions before developers can act.
@@ -120,8 +150,7 @@ Use fake/sample issues for demos until a secure backend, privacy policy, and cus
 ## Next Technical Milestones
 
 1. Deploy the backend on Render and point `VITE_API_BASE_URL` at it.
-2. Add OpenAI or another LLM provider behind the existing `ReportProvider` interface.
-3. Add PostgreSQL persistence for users, reports, templates, and leads.
-4. Add authentication and account workspaces.
-5. Add GitHub Issues export as the first real integration.
-6. Add billing only after users show willingness to pay.
+2. Add PostgreSQL persistence for users, reports, templates, and leads.
+3. Add authentication and account workspaces.
+4. Add GitHub Issues export as the first real integration.
+5. Add billing only after users show willingness to pay.

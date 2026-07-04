@@ -5,6 +5,13 @@ services:
     plan: free
     rootDir: backend
     healthCheckPath: /actuator/health
+    envVars:
+      - key: BUGPILOT_AI_PROVIDER
+        value: deterministic
+      - key: OPENAI_MODEL
+        value: gpt-5.4-mini
+      - key: OPENAI_API_KEY
+        sync: false
 
   - type: web
     name: bugpilot-web

@@ -8,6 +8,7 @@ This is the execution checklist for turning BugPilot AI from a proof product int
 - GitHub repository exists: `jasmandeep15/bugpilot-ai`.
 - Local demo runs with `npm run dev`.
 - The app can generate structured reports from fake incident/support inputs.
+- Backend supports deterministic mode by default and optional server-side OpenAI mode.
 - Export formats exist for Markdown, GitHub Issue, Jira Ticket, and Linear Issue.
 - Local beta lead capture exists through browser storage.
 
@@ -44,6 +45,7 @@ Goal: replace deterministic report generation with a secure backend-owned LLM wo
 - [x] Connect frontend API action to backend with local fallback.
 - [x] Add prompt templates for bug report, incident summary, support escalation, regression, and release blocker.
 - [x] Add provider abstraction so OpenAI/other LLMs can be swapped.
+- [x] Add optional OpenAI Responses API provider behind backend-only configuration.
 - [x] Add validation and safe error responses.
 - [x] Add rate limits and structured logging.
 - [x] Add integration tests for report generation flow.
