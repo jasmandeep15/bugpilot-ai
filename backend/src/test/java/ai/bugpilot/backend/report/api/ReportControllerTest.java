@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -40,7 +41,8 @@ class ReportControllerTest {
                 .andExpect(jsonPath("$.confidence").value("High"))
                 .andExpect(jsonPath("$.developerHandoff", containsString("payment gateway migration")))
                 .andExpect(jsonPath("$.reproductionSteps", hasSize(4)))
-                .andExpect(jsonPath("$.qualitySignals", hasSize(4)));
+                .andExpect(jsonPath("$.qualitySignals", hasSize(4)))
+                .andExpect(header().exists("X-Request-Id"));
     }
 
     @Test

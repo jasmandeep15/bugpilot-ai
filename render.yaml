@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: bugpilot-api
+    runtime: docker
+    plan: free
+    rootDir: backend
+    healthCheckPath: /actuator/health
+
+  - type: web
+    name: bugpilot-web
+    runtime: static
+    plan: free
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://bugpilot-api.onrender.com

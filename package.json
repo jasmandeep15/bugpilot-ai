@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
     "check": "npm run build",
+    "check:all": "npm run check && npm run backend:test",
     "backend:dev": "cd backend && mvnw.cmd spring-boot:run",
     "backend:test": "cd backend && mvnw.cmd test"
   },

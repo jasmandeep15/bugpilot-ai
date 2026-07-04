@@ -21,6 +21,9 @@ Goal: make the product easy to demo and validate with buyers.
 - [x] Push code to GitHub.
 - [x] Add GitHub Pages deployment workflow.
 - [x] Enable GitHub Pages in repository settings if required.
+- [x] Deploy public frontend through GitHub Pages.
+- [x] Add Render deployment blueprint for frontend/backend hosting.
+- [x] Add CI workflow for frontend build and backend tests.
 - [ ] Share public demo link with 10 target users.
 - [ ] Collect 10 pieces of feedback.
 
@@ -38,11 +41,13 @@ Goal: replace deterministic report generation with a secure backend-owned LLM wo
 - [x] Add endpoint: `POST /api/reports/generate`.
 - [x] Define request DTO: raw input, template, severity, export format.
 - [x] Define response DTO: title, priority, confidence, evidence quality, report sections.
-- [ ] Add prompt templates for bug report, incident RCA, support escalation, regression, and release blocker.
-- [ ] Add provider abstraction so OpenAI/other LLMs can be swapped.
+- [x] Connect frontend API action to backend with local fallback.
+- [x] Add prompt templates for bug report, incident summary, support escalation, regression, and release blocker.
+- [x] Add provider abstraction so OpenAI/other LLMs can be swapped.
 - [x] Add validation and safe error responses.
-- [ ] Add rate limits and structured logging.
+- [x] Add rate limits and structured logging.
 - [x] Add integration tests for report generation flow.
+- [ ] Deploy backend to Render or another free backend host.
 
 Acceptance criteria:
 

@@ -34,10 +34,10 @@ const examples = [
   {
     id: 'api-timeout',
     title: 'API timeout incident',
-    type: 'Incident RCA',
+    type: 'Incident summary',
     severity: 'Critical',
     input:
-      'From 10:05 to 10:42 UTC, customers reported dashboard loading forever. p95 latency on /api/reports jumped to 18s. DB CPU 95%. Recent deployment added joins for account usage summary. Rollback at 10:38 improved latency. 18 enterprise accounts affected. Need RCA and customer note.'
+      'From 10:05 to 10:42 UTC, customers reported dashboard loading forever. p95 latency on /api/reports jumped to 18s. DB CPU 95%. Recent deployment added joins for account usage summary. Rollback at 10:38 improved latency. 18 enterprise accounts affected. Need incident summary and customer note.'
   },
   {
     id: 'login-issue',
@@ -49,10 +49,11 @@ const examples = [
   }
 ];
 
-const templates = ['Bug report', 'Incident RCA', 'Support escalation', 'Regression report', 'Release blocker'];
+const templates = ['Bug report', 'Incident summary', 'Support escalation', 'Regression report', 'Release blocker'];
 const severities = ['Low', 'Medium', 'High', 'Critical'];
 
 const defaultInput = examples[0].input;
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8080';
 
 function pickSeverity(text, fallback) {
   const lowered = text.toLowerCase();
@@ -187,10 +188,10 @@ ${report.missingInfo.map((item) => `- ${item}`).join('\n')}
 ## Developer Handoff
 ${report.developerHandoff}
 
-## Customer Reply
+## Reply draft
 ${report.customerReply}
 
-## RCA Draft
+## Incident summary
 ${report.rcaDraft.map((item) => `- ${item}`).join('\n')}
 `;
 }
@@ -260,39 +261,39 @@ function Hero() {
   return (
     <section id="hero" className="hero">
       <div className="hero-copy">
-        <p className="eyebrow">Engineering ops AI for small SaaS teams</p>
-        <h1>Turn messy support escalations into engineer-ready bug reports.</h1>
+        <p className="eyebrow">For software teams that support real customers</p>
+        <h1>Turn messy customer issues into clear developer tickets.</h1>
         <p className="hero-subtitle">
-          BugPilot AI converts tickets, logs, Slack notes, and incident fragments into reproduction steps,
-          RCA drafts, missing-info checklists, developer handoffs, and customer replies.
+          BugPilot AI turns support notes, logs, screenshots, and chat threads into clean bug reports,
+          next questions, developer notes, and customer-safe replies.
         </p>
         <div className="hero-actions">
           <a className="primary-btn" href="#demo">
-            Generate a report <Sparkles size={18} />
+            Generate a ticket <Sparkles size={18} />
           </a>
           <a className="secondary-btn" href="#validation">
-            View go-to-market assets <BookOpenText size={18} />
+            View sales assets <BookOpenText size={18} />
           </a>
         </div>
         <div className="metrics">
           <div><strong>5 min</strong><span>demo-ready workflow</span></div>
-          <div><strong>$49-$99</strong><span>early SaaS pricing</span></div>
-          <div><strong>₹40k/mo</strong><span>first revenue target</span></div>
+          <div><strong>\$5/user</strong><span>starting beta price</span></div>
+          <div><strong>₹40k/mo</strong><span>first Low beta price</span></div>
         </div>
       </div>
       <div className="hero-panel" aria-label="BugPilot sample output">
         <div className="panel-top">
           <span className="status-dot"></span>
-          <span>Generated handoff</span>
+          <span>Ready for review</span>
         </div>
         <div className="ticket-preview">
           <span className="tag critical">P1</span>
-          <h2>Billing and payments: checkout fails for annual plan</h2>
-          <p>Suspected gateway migration issue. Missing Stripe token on POST /api/billing/charge.</p>
+          <h2>Checkout fails for annual plan</h2>
+          <p>Clear cause to check, exact proof to attach, and a Reply draft ready for review.</p>
           <ul>
-            <li>Reproduce annual plan checkout in Chrome.</li>
-            <li>Attach request ID, 500 response, and gateway payload.</li>
-            <li>Customer-safe reply generated for support.</li>
+            <li>What the developer should test first.</li>
+            <li>What proof is missing before filing.</li>
+            <li>What support can safely tell the customer.</li>
           </ul>
         </div>
       </div>
@@ -319,7 +320,7 @@ function DemoWorkspace() {
   async function generateWithBackend() {
     setApiStatus('Calling backend API...');
     try {
-      const response = await fetch('http://127.0.0.1:8080/api/reports/generate', {
+      const response = await fetch(`${apiBaseUrl}/api/reports/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -360,15 +361,15 @@ function DemoWorkspace() {
   return (
     <section id="demo" className="section">
       <div className="section-heading">
-        <p className="eyebrow">Live proof product</p>
-        <h2>Paste chaos. Ship a clean engineering handoff.</h2>
-        <p>Use the fake examples or write your own messy ticket. No confidential employer data should be pasted here.</p>
+        <p className="eyebrow">Live product demo</p>
+        <h2>Paste a rough issue. Get a clean ticket.</h2>
+        <p>Use the sample issues or write your own fake example. Do not paste private company or customer data.</p>
       </div>
 
       <div className="demo-grid">
         <div className="input-pane">
           <div className="pane-header">
-            <h3>Incident input</h3>
+            <h3>Customer issue</h3>
             <span>Fake/sample data only</span>
           </div>
           <div className="sample-row">
@@ -419,7 +420,7 @@ function DemoWorkspace() {
 
         <div className="output-pane">
           <div className="pane-header">
-            <h3>Generated report</h3>
+            <h3>Ready-to-review ticket</h3>
             <div className="actions">
               <button type="button" onClick={generateWithBackend}><Rocket size={16} /> API</button>
               <button type="button" onClick={copyExport}><Copy size={16} /> Copy</button>
@@ -441,18 +442,18 @@ function DemoWorkspace() {
               <ShieldCheck size={18} />
               <span>
                 {report.confidence === 'High'
-                  ? 'Strong handoff: customer impact, evidence, timeline, and suspected change are present.'
+                  ? 'Strong draft: impact, proof, timing, and likely change are included.'
                   : report.confidence === 'Medium'
-                    ? 'Usable draft: verify missing context before filing this with engineering.'
-                    : 'Needs review: this input lacks enough evidence for a reliable bug report.'}
+                    ? 'Usable draft: review the missing details before sending this to developers.'
+                    : 'Needs more detail: this issue is too thin to send without follow-up questions.'}
               </span>
             </div>
             <ReportSection title="Summary" content={report.summary} />
             <QualitySignals signals={report.qualitySignals} />
             <ReportSection title="Reproduction steps" items={report.reproductionSteps} />
             <ReportSection title="Missing information" items={report.missingInfo} />
-            <ReportSection title="Developer handoff" content={report.developerHandoff} />
-            <ReportSection title="Customer reply" content={report.customerReply} />
+            <ReportSection title="Developer note" content={report.developerHandoff} />
+            <ReportSection title="Reply draft" content={report.customerReply} />
           </div>
         </div>
       </div>
@@ -485,16 +486,16 @@ function ReportSection({ title, content, items }) {
 
 function ProductSection() {
   const features = [
-    ['Bug triage', 'Clean title, priority, area, reproduction steps, and missing-info checklist.'],
-    ['Incident RCA', 'Impact, suspected cause, mitigation, prevention actions, and customer-safe updates.'],
-    ['Export formats', 'Markdown today, GitHub/Jira/Linear handoff language for early customer demos.'],
-    ['Company brain path', 'Later: learn from old bugs, incidents, runbooks, and release notes.']
+    ['Clear tickets', 'Clean title, priority, affected area, test steps, and missing details.'],
+    ['Customer updates', 'A calm reply your support team can review and send faster.'],
+    ['Developer exports', 'Copy-ready formats for GitHub, Jira, Linear, and Markdown.'],
+    ['Team memory', 'Later: reuse past issues so teams do not solve the same problem twice.']
   ];
   return (
     <section id="product" className="section tinted">
       <div className="section-heading">
-        <p className="eyebrow">Product wedge</p>
-        <h2>Start with support-to-engineering handoff. Expand into engineering memory.</h2>
+        <p className="eyebrow">Why teams buy it</p>
+        <h2>Less back-and-forth between support and developers.</h2>
       </div>
       <div className="feature-grid">
         {features.map(([title, body]) => (
@@ -511,15 +512,15 @@ function ProductSection() {
 
 function PricingSection() {
   const tiers = [
-    ['Starter', '$19/mo', 'Solo founders and early SaaS teams validating bug triage automation.'],
-    ['Startup', '$49/mo', 'Small teams handling recurring customer escalations.'],
-    ['Pro', '$99/mo', 'Support-heavy SaaS teams needing custom templates and review support.']
+    ['Beta seat', '$5/user/mo', 'For early teams. Unlimited drafts during beta, billed only for active teammates.'],
+    ['Team pack', '$39/mo', 'Up to 10 teammates. Best for small teams that want one simple monthly price.'],
+    ['Founder deal', '$99/mo', 'Unlimited teammates for early customers who give monthly feedback and case-study permission.']
   ];
   return (
     <section id="pricing" className="section">
       <div className="section-heading">
-        <p className="eyebrow">Pricing hypothesis</p>
-        <h2>Designed to reach ₹40k/month with 5-10 customers.</h2>
+        <p className="eyebrow">Beta pricing</p>
+        <h2>Cheaper than one support call going in circles.</h2>
       </div>
       <div className="pricing-grid">
         {tiers.map(([name, price, description]) => (
@@ -546,14 +547,14 @@ function ValidationSection({ leads, addLead }) {
   }
 
   const outreach =
-    'Hi [Name], I’m building BugPilot AI for small software teams. It turns messy support tickets, logs, and Slack/Jira notes into clean engineer-ready bug reports, reproduction steps, RCA drafts, and customer replies. Curious: does your team lose time converting customer issues into actionable dev tickets?';
+    'Hi [Name], I am building BugPilot AI for small software teams. It turns rough customer issues, logs, screenshots, and chat notes into clear developer tickets and customer-safe replies. Curious: does your team lose time going back and forth before a bug is ready for developers?';
 
   return (
     <section id="validation" className="section validation">
       <div className="section-heading">
-        <p className="eyebrow">Validation cockpit</p>
-        <h2>Use this page to sell before overbuilding.</h2>
-        <p>Track early leads in localStorage and reuse the outreach copy for async discovery.</p>
+        <p className="eyebrow">Sales tracker</p>
+        <h2>Track who wants the beta.</h2>
+        <p>Save early leads locally and reuse the outreach copy for quick founder conversations.</p>
       </div>
       <div className="validation-grid">
         <form className="lead-form" onSubmit={submit}>
@@ -567,7 +568,7 @@ function ValidationSection({ leads, addLead }) {
             <option>Support lead</option>
             <option>Developer</option>
           </select>
-          <textarea placeholder="What support-to-engineering pain do they have?" value={form.pain} onChange={(e) => setForm({ ...form, pain: e.target.value })} />
+          <textarea placeholder="Where does your team lose time on customer issues?" value={form.pain} onChange={(e) => setForm({ ...form, pain: e.target.value })} />
           <button className="primary-btn" type="submit">Save lead <ArrowRight size={17} /></button>
         </form>
 
@@ -603,14 +604,14 @@ function Roadmap() {
     ['Day 7', 'Landing page, fake demos, first 20 outbound messages.'],
     ['Day 30', '30 contacted, 10 useful replies, 3 demo users, 1 payment signal.'],
     ['Day 60', 'Private beta live with saved reports and exports.'],
-    ['Month 6', '5-10 customers at $49-$99/month.']
+    ['Month 6', '10-20 teams using beta pricing with a path to higher plans.']
   ];
   return (
     <section className="roadmap">
       <div className="roadmap-inner">
         <div>
           <p className="eyebrow">Execution path</p>
-          <h2>Build only what revenue proves.</h2>
+          <h2>Build only what paying teams ask for twice.</h2>
         </div>
         <div className="timeline">
           {steps.map(([time, text]) => (
@@ -630,7 +631,7 @@ function Footer() {
     <footer className="footer">
       <div>
         <strong>BugPilot AI</strong>
-        <p>Proof product for engineering ops AI SaaS validation.</p>
+        <p>Customer issue to developer ticket, ready for review.</p>
       </div>
       <div className="footer-links">
         <span><ShieldCheck size={16} /> No confidential data</span>
@@ -650,10 +651,10 @@ function App() {
         <Hero />
         <div className="proof-strip" aria-label="Product proof points">
           <span><LayoutDashboard size={17} /> Live demo</span>
-          <span><MessageSquareText size={17} /> Customer reply</span>
-          <span><Target size={17} /> Bug triage</span>
-          <span><Timer size={17} /> RCA draft</span>
-          <span><BadgeDollarSign size={17} /> Revenue target</span>
+          <span><MessageSquareText size={17} /> Reply draft</span>
+          <span><Target size={17} /> Clear tickets</span>
+          <span><Timer size={17} /> Faster tickets</span>
+          <span><BadgeDollarSign size={17} /> Low beta price</span>
         </div>
         <DemoWorkspace />
         <ProductSection />

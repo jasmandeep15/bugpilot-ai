@@ -1,19 +1,19 @@
 # BugPilot AI
 
-BugPilot AI is a proof product for a global B2B engineering-ops SaaS.
+BugPilot AI helps small software teams turn rough customer issues into clear developer tickets.
 
 It turns messy support tickets, incident notes, logs, and Slack/Jira fragments into:
 
-- Engineer-ready bug reports
+- Developer-ready bug reports
 - Reproduction steps
 - Severity and priority suggestions
 - Missing-information checklists
-- Developer handoff notes
+- Developer notes
 - Customer-facing replies
-- RCA drafts
+- Incident summaries
 - Markdown, GitHub, Jira, and Linear-style exports
 
-The current version is intentionally frontend-only so it can be demoed, validated, and iterated quickly before adding a paid LLM backend.
+The current version includes a React frontend and a Spring Boot backend. The backend uses deterministic report generation today so the product can be demoed without paid AI keys. The next step is adding an LLM provider behind the backend service.
 
 ## Run Locally
 
@@ -45,6 +45,14 @@ The backend exposes:
 - `POST http://127.0.0.1:8080/api/reports/generate`
 - `GET http://127.0.0.1:8080/actuator/health`
 
+Frontend environment:
+
+```bash
+cp .env.example .env.local
+```
+
+Set `VITE_API_BASE_URL` when the backend is deployed.
+
 ## Build
 
 ```bash
@@ -66,38 +74,54 @@ The full execution checklist is maintained in [PROJECT_STEPS.md](./PROJECT_STEPS
 
 This repository includes a GitHub Pages workflow at `.github/workflows/deploy-pages.yml`.
 
-If GitHub Pages is not already active:
+Current public frontend:
+
+- https://jasmandeep15.github.io/bugpilot-ai/
+
+If GitHub Pages needs to be reconfigured:
 
 1. Open the GitHub repository.
 2. Go to `Settings` -> `Pages`.
 3. Set the source to `GitHub Actions`.
 4. Run the `Deploy BugPilot AI to GitHub Pages` workflow or push to `main`.
 
+## Backend Deployment
+
+The repo includes a Render blueprint in `render.yaml` and a backend Dockerfile.
+
+Recommended free deployment path:
+
+1. Create a Render account.
+2. Connect the GitHub repository `jasmandeep15/bugpilot-ai`.
+3. Create services from `render.yaml`.
+4. Confirm backend health at `/actuator/health`.
+5. Set the frontend `VITE_API_BASE_URL` to the deployed backend URL.
+
 ## Product Positioning
 
-BugPilot AI is not a generic chatbot. The wedge is support-to-engineering handoff quality.
+BugPilot AI is not a generic chatbot. The wedge is simple: fewer back-and-forth questions before developers can act.
 
-The product should help small SaaS teams answer:
+The product should help small software teams answer:
 
 - What exactly is broken?
 - Who is affected?
 - Can engineering reproduce it?
 - What evidence exists?
 - What information is missing?
-- What can support safely tell the customer?
+- What can the team safely tell the customer?
 - Is this a bug, incident, regression, or release blocker?
 
 ## Important Data Rule
 
 Do not paste confidential employer data, bank data, customer data, production secrets, internal logs, private screenshots, tokens, API keys, or proprietary workflows into the demo.
 
-Use fake/sample incidents for demos until a secure backend, privacy policy, and customer data handling process exist.
+Use fake/sample issues for demos until a secure backend, privacy policy, and customer data handling process exist.
 
 ## Next Technical Milestones
 
-1. Add a Spring Boot API for report generation requests.
-2. Add PostgreSQL persistence for users, reports, templates, and leads.
-3. Add LLM provider integration behind a service interface.
+1. Deploy the backend on Render and point `VITE_API_BASE_URL` at it.
+2. Add OpenAI or another LLM provider behind the existing `ReportProvider` interface.
+3. Add PostgreSQL persistence for users, reports, templates, and leads.
 4. Add authentication and account workspaces.
 5. Add GitHub Issues export as the first real integration.
 6. Add billing only after users show willingness to pay.
