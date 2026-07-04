@@ -16,24 +16,31 @@ public class ReportGenerationService {
     private final DeterministicReportProvider deterministicReportProvider;
     private final OpenAiReportProvider openAiReportProvider;
     private final AiProperties aiProperties;
+    private final SavedReportService savedReportService;
 
     public ReportGenerationService(
             PromptTemplateCatalog promptTemplateCatalog,
             DeterministicReportProvider deterministicReportProvider,
             OpenAiReportProvider openAiReportProvider,
-            AiProperties aiProperties
+            AiProperties aiProperties,
+            SavedReportService savedReportService
     ) {
         this.promptTemplateCatalog = promptTemplateCatalog;
         this.deterministicReportProvider = deterministicReportProvider;
         this.openAiReportProvider = openAiReportProvider;
         this.aiProperties = aiProperties;
+        this.savedReportService = savedReportService;
     }
 
     public ReportResponse generate(GenerateReportRequest request) {
         PromptTemplate promptTemplate = promptTemplateCatalog.find(request.template());
+        ReportResponse report;
         if (aiProperties.openAiEnabled()) {
-            return openAiReportProvider.generate(request, promptTemplate);
+            report = openAiReportProvider.generate(request, promptTemplate);
+        } else {
+            report = deterministicReportProvider.generate(request, promptTemplate);
         }
-        return deterministicReportProvider.generate(request, promptTemplate);
+        savedReportService.save(report);
+        return report;
     }
 }

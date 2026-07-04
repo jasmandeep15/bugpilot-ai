@@ -9,6 +9,7 @@ This is the execution checklist for turning BugPilot AI from a proof product int
 - Local demo runs with `npm run dev`.
 - The app can generate structured reports from fake incident/support inputs.
 - Backend supports deterministic mode by default and optional server-side OpenAI mode.
+- Backend stores generated report outputs and exposes recent-report history.
 - Export formats exist for Markdown, GitHub Issue, Jira Ticket, and Linear Issue.
 - Local beta lead capture exists through browser storage.
 
@@ -61,10 +62,10 @@ Acceptance criteria:
 
 Goal: support real users and saved work.
 
-- [ ] Add PostgreSQL.
+- [x] Add PostgreSQL-ready JPA persistence with local H2 fallback.
 - [ ] Add user accounts.
 - [ ] Add workspace model.
-- [ ] Persist reports, templates, and export history.
+- [x] Persist generated report outputs and expose recent saved reports.
 - [ ] Add basic dashboard filters.
 - [ ] Add data deletion flow.
 

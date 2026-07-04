@@ -308,14 +308,41 @@ function DemoWorkspace() {
   const [format, setFormat] = useState('markdown');
   const [apiReport, setApiReport] = useState(null);
   const [apiStatus, setApiStatus] = useState('Local generator ready');
+  const [recentReports, setRecentReports] = useState([]);
   const localReport = useMemo(() => generateReport({ input, template, severity }), [input, template, severity]);
   const report = apiReport || localReport;
   const exportText = format === 'markdown' ? toMarkdown(report) : toIssueFormat(report, format);
 
   useEffect(() => {
+    loadRecentReports();
+  }, []);
+
+  useEffect(() => {
     setApiReport(null);
     setApiStatus('Local generator ready');
   }, [input, template, severity]);
+
+  async function loadRecentReports() {
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/reports`);
+      if (!response.ok) return;
+      setRecentReports(await response.json());
+    } catch {
+      setRecentReports([]);
+    }
+  }
+
+  async function openSavedReport(id) {
+    setApiStatus('Loading saved report...');
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/reports/${id}`);
+      if (!response.ok) throw new Error(`Backend returned ${response.status}`);
+      setApiReport(await response.json());
+      setApiStatus('Saved report loaded');
+    } catch (error) {
+      setApiStatus(`Saved report unavailable: ${error.message}`);
+    }
+  }
 
   async function generateWithBackend() {
     setApiStatus('Generating with backend...');
@@ -338,6 +365,7 @@ function DemoWorkspace() {
 
       setApiReport(await response.json());
       setApiStatus('Backend response loaded');
+      await loadRecentReports();
     } catch (error) {
       setApiReport(null);
       setApiStatus(`Backend unavailable: ${error.message}. Showing local generator output.`);
@@ -454,6 +482,24 @@ function DemoWorkspace() {
             <ReportSection title="Missing information" items={report.missingInfo} />
             <ReportSection title="Developer note" content={report.developerHandoff} />
             <ReportSection title="Reply draft" content={report.customerReply} />
+          </div>
+          <div className="recent-reports">
+            <div className="recent-header">
+              <h3>Recent reports</h3>
+              <button type="button" onClick={loadRecentReports}>Refresh</button>
+            </div>
+            {recentReports.length === 0 ? (
+              <p>No backend reports saved yet.</p>
+            ) : (
+              <div className="recent-list">
+                {recentReports.map((item) => (
+                  <button type="button" key={item.id} onClick={() => openSavedReport(item.id)}>
+                    <strong>{item.title}</strong>
+                    <span>{item.priority} - {item.area} - {new Date(item.createdAt).toLocaleDateString()}</span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

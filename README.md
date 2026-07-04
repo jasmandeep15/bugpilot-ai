@@ -43,6 +43,8 @@ cd backend
 The backend exposes:
 
 - `POST http://127.0.0.1:8080/api/reports/generate`
+- `GET http://127.0.0.1:8080/api/reports`
+- `GET http://127.0.0.1:8080/api/reports/{id}`
 - `GET http://127.0.0.1:8080/actuator/health`
 
 Backend AI mode:
@@ -68,6 +70,12 @@ $env:OPENAI_API_KEY="sk-..."
 ```
 
 Never put `OPENAI_API_KEY` in frontend `.env.local` or static hosting settings.
+
+Database mode:
+
+- Local/dev default: in-memory H2 using PostgreSQL compatibility mode.
+- Production: set `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, and `SPRING_DATASOURCE_PASSWORD` to a PostgreSQL database.
+- BugPilot stores generated report output and report metadata. It does not store the raw pasted issue input.
 
 Frontend environment:
 

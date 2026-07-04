@@ -1,5 +1,7 @@
 package ai.bugpilot.backend.report.api;
 
+import ai.bugpilot.backend.report.persistence.ReportRecordRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -10,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -20,6 +23,14 @@ class ReportControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ReportRecordRepository reportRecordRepository;
+
+    @BeforeEach
+    void cleanReports() {
+        reportRecordRepository.deleteAll();
+    }
 
     @Test
     void generateReportReturnsEngineerReadyReport() throws Exception {
@@ -43,6 +54,12 @@ class ReportControllerTest {
                 .andExpect(jsonPath("$.reproductionSteps", hasSize(4)))
                 .andExpect(jsonPath("$.qualitySignals", hasSize(4)))
                 .andExpect(header().exists("X-Request-Id"));
+
+        mockMvc.perform(get("/api/reports"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].area").value("Billing and payments"))
+                .andExpect(jsonPath("$[0].priority").value("P0"));
     }
 
     @Test
@@ -61,5 +78,12 @@ class ReportControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Request validation failed"))
                 .andExpect(jsonPath("$.fieldErrors.input").exists());
+    }
+
+    @Test
+    void savedReportReturnsNotFoundForUnknownId() throws Exception {
+        mockMvc.perform(get("/api/reports/11111111-1111-1111-1111-111111111111"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Report not found"));
     }
 }

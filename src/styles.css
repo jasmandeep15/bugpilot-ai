@@ -223,6 +223,7 @@ h1 {
 .panel-top,
 .pane-header,
 .report-title-row,
+.recent-header,
 .footer,
 .footer-links,
 .proof-strip {
@@ -436,7 +437,8 @@ select {
 
 .actions button,
 .asset-card button,
-.price-card button {
+.price-card button,
+.recent-header button {
   min-height: 38px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -557,6 +559,60 @@ dd {
 .report-section li {
   color: #334155;
   line-height: 1.55;
+}
+
+.recent-reports {
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 14px;
+}
+
+.recent-header {
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.recent-header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.recent-header button {
+  padding: 7px 10px;
+}
+
+.recent-reports p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.recent-list {
+  display: grid;
+  gap: 8px;
+}
+
+.recent-list button {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.recent-list strong,
+.recent-list span {
+  display: block;
+}
+
+.recent-list span {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.86rem;
 }
 
 .feature-grid,
