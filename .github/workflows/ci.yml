@@ -45,4 +45,4 @@ jobs:
           cache: maven
 
       - name: Test backend
-        run: ./mvnw test
+        run: chmod +x mvnw && ./mvnw test
