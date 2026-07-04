@@ -17,6 +17,8 @@ The current version is intentionally frontend-only so it can be demoed, validate
 
 ## Run Locally
 
+Frontend:
+
 ```bash
 npm install
 npm run dev
@@ -24,10 +26,36 @@ npm run dev
 
 Open the local URL printed by Vite.
 
+Backend:
+
+```bash
+cd backend
+./mvnw spring-boot:run
+```
+
+On Windows PowerShell:
+
+```powershell
+cd backend
+.\mvnw.cmd spring-boot:run
+```
+
+The backend exposes:
+
+- `POST http://127.0.0.1:8080/api/reports/generate`
+- `GET http://127.0.0.1:8080/actuator/health`
+
 ## Build
 
 ```bash
 npm run build
+```
+
+Backend tests:
+
+```bash
+cd backend
+./mvnw test
 ```
 
 ## Project Execution Steps

@@ -20,7 +20,7 @@ Goal: make the product easy to demo and validate with buyers.
 - [x] Add pricing hypothesis and validation cockpit.
 - [x] Push code to GitHub.
 - [x] Add GitHub Pages deployment workflow.
-- [ ] Enable GitHub Pages in repository settings if required.
+- [x] Enable GitHub Pages in repository settings if required.
 - [ ] Share public demo link with 10 target users.
 - [ ] Collect 10 pieces of feedback.
 
@@ -34,14 +34,15 @@ Acceptance criteria:
 
 Goal: replace deterministic report generation with a secure backend-owned LLM workflow.
 
-- [ ] Create Spring Boot backend service.
-- [ ] Add endpoint: `POST /api/reports/generate`.
-- [ ] Define request DTO: raw input, template, severity, export format.
-- [ ] Define response DTO: title, priority, confidence, evidence quality, report sections.
+- [x] Create Spring Boot backend service.
+- [x] Add endpoint: `POST /api/reports/generate`.
+- [x] Define request DTO: raw input, template, severity, export format.
+- [x] Define response DTO: title, priority, confidence, evidence quality, report sections.
 - [ ] Add prompt templates for bug report, incident RCA, support escalation, regression, and release blocker.
 - [ ] Add provider abstraction so OpenAI/other LLMs can be swapped.
-- [ ] Add validation, rate limits, structured logging, and safe error responses.
-- [ ] Add integration tests for report generation flow.
+- [x] Add validation and safe error responses.
+- [ ] Add rate limits and structured logging.
+- [x] Add integration tests for report generation flow.
 
 Acceptance criteria:
 

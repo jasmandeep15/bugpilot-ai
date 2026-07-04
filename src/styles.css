@@ -424,6 +424,16 @@ select {
   gap: 8px;
 }
 
+.api-status {
+  margin: 0 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #f8fafc;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
 .actions button,
 .asset-card button,
 .price-card button {

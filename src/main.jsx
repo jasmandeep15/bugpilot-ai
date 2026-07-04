@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   ArrowRight,
@@ -305,8 +305,43 @@ function DemoWorkspace() {
   const [template, setTemplate] = useState('Bug report');
   const [severity, setSeverity] = useState('High');
   const [format, setFormat] = useState('markdown');
-  const report = useMemo(() => generateReport({ input, template, severity }), [input, template, severity]);
+  const [apiReport, setApiReport] = useState(null);
+  const [apiStatus, setApiStatus] = useState('Local generator ready');
+  const localReport = useMemo(() => generateReport({ input, template, severity }), [input, template, severity]);
+  const report = apiReport || localReport;
   const exportText = format === 'markdown' ? toMarkdown(report) : toIssueFormat(report, format);
+
+  useEffect(() => {
+    setApiReport(null);
+    setApiStatus('Local generator ready');
+  }, [input, template, severity]);
+
+  async function generateWithBackend() {
+    setApiStatus('Calling backend API...');
+    try {
+      const response = await fetch('http://127.0.0.1:8080/api/reports/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          input,
+          template,
+          severity,
+          exportFormat: format
+        })
+      });
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => null);
+        throw new Error(error?.message || `Backend returned ${response.status}`);
+      }
+
+      setApiReport(await response.json());
+      setApiStatus('Backend API response loaded');
+    } catch (error) {
+      setApiReport(null);
+      setApiStatus(`Backend unavailable: ${error.message}. Showing local generator output.`);
+    }
+  }
 
   async function copyExport() {
     await navigator.clipboard.writeText(exportText);
@@ -386,10 +421,12 @@ function DemoWorkspace() {
           <div className="pane-header">
             <h3>Generated report</h3>
             <div className="actions">
+              <button type="button" onClick={generateWithBackend}><Rocket size={16} /> API</button>
               <button type="button" onClick={copyExport}><Copy size={16} /> Copy</button>
               <button type="button" onClick={downloadMarkdown}><FileText size={16} /> Export</button>
             </div>
           </div>
+          <div className="api-status">{apiStatus}</div>
           <div className="report-card">
             <div className="report-title-row">
               <span className={`tag ${report.severity.toLowerCase()}`}>{report.priority}</span>
